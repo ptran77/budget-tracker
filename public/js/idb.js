@@ -1,7 +1,7 @@
 // varible to hold db connection
 let db;
 
-// establish coneection to IndexedDB database called 'budget' and set to version 1
+// establish connection to IndexedDB database called 'budget' and set to version 1
 const request = indexedDB.open('budget', 1);
 
 // event will occur if database version changes
@@ -26,3 +26,14 @@ request.onsuccess = function (event) {
 request.onerror = function(event) {
   console.log(event.target.errorCode);
 };
+
+
+// saves the record when a new budget is submitted and there is no internet connection
+function saveRecord(record) {
+  // open a new transaction with the database with read and write permissions 
+  const transaction = db.transaction(['new_budget'], 'readwrite');
+  // access the object store for 'new budget'
+  const budgetObjectStore = transaction.objectStore('new_budget');
+  // add record to your store
+  budgetObjectStore.add(record)
+}
